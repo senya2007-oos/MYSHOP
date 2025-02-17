@@ -1,3 +1,12 @@
+// Функция добавления товара и перехода на checkout.html
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Перенаправление на страницу оформления заказа
+    window.location.href = "checkout.html";
+}
 document.addEventListener("DOMContentLoaded", function () {
     fetch("products.json")
         .then(response => response.json())

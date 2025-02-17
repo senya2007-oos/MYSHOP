@@ -1,75 +1,52 @@
-// Функция добавления товара и перехода на checkout.html
+// Функция добавления товара в корзину
 function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
+    let cart = JSON.parse(localStorage.getItem("cart")) || []; // Загружаем корзину
+    cart.push({ name, price }); // Добавляем товар
+    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем обратно
 
-    // Перенаправление на страницу оформления заказа
-    window.location.href = "checkout.html";
-}
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("products.json")
-        .then(response => response.json())
-        .then(products => {
-            let productsContainer = document.getElementById("products");
-            products.forEach(product => {
-                let productElement = document.createElement("div");
-                productElement.classList.add("product");
-                productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.price} руб.</p>
-                    <button onclick="addToCart('${product.name}', ${product.price})">Купить</button>
-                `;
-                productsContainer.appendChild(productElement);
-            });
-        });
-});
-
-// Функция для добавления товара в корзину
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
     alert("Товар добавлен в корзину!");
-    displayCart(); // Обновляем корзину сразу после добавления
 }
 
-// Функция для отображения товаров в корзине
+// Функция отображения товаров в корзине
 function displayCart() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let cartItems = document.getElementById("cart-items");
     let totalPrice = document.getElementById("total-price");
 
-    if (!cartItems || !totalPrice) return; // Проверяем, что элементы существуют
+    if (!cartItems || !totalPrice) return; // Если элементов нет, ничего не делать
 
     cartItems.innerHTML = ""; // Очищаем корзину перед рендерингом
     let total = 0;
 
     cart.forEach((item, index) => {
         total += item.price;
-        cartItems.innerHTML += `<li>${item.name} - ${item.price} руб.
+        cartItems.innerHTML += `<li>${item.name} - $${item.price} 
             <button onclick="removeFromCart(${index})">❌</button></li>`;
     });
 
-    totalPrice.innerText = `Итого: ${total} руб.`;
+    totalPrice.innerText = `Итого: $${total}`;
 }
 
-// Функция для удаления товара
+// Функция для удаления товара из корзины
 function removeFromCart(index) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    displayCart();
+    cart.splice(index, 1); // Удаляем товар
+    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем
+    displayCart(); // Обновляем корзину
 }
 
-// Функция добавления товара в корзину
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || []; // Получаем текущую корзину
-    cart.push({ name, price }); // Добавляем товар
-    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем корзину в localStorage
-
-    alert("Товар добавлен в корзину!"); // Уведомление для пользователя
+// Функция для очистки корзины
+function clearCart() {
+    localStorage.removeItem("cart"); // Удаляем корзину
+    displayCart(); // Обновляем корзину
 }
+
+// Функция для перехода на страницу оплаты
+function checkout() {
+    window.location.href = "checkout.html"; // Переход на checkout.html
+}
+
+// Запускаем функцию отображения корзины при загрузке страницы
+document.addEventListener("DOMContentLoaded", displayCart);
 
 

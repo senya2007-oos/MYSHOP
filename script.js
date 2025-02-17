@@ -65,7 +65,8 @@ function clearCart() {
 function checkout() {
     window.location.href = "checkout.html";
 } document.addEventListener("DOMContentLoaded", function () {
-    const stripe = Stripe("pk_test_Ваш_ключ"); // Вставь свой Publishable Key
+    const stripe = Stripe("Publishable key"); // 
+pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb
 
     document.getElementById("pay-button").addEventListener("click", async function () {
         const response = await fetch("http://localhost:3000/create-checkout-session", {

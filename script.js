@@ -41,7 +41,6 @@ function clearCart() {
     displayCart(); // Обновляем корзину
 }
 
-// Функция для перехода на страницу оплаты
 function checkout() {
     window.location.href = "checkout.html"; // Переход на checkout.html
 }

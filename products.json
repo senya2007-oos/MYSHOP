@@ -2,13 +2,19 @@
     {
         "id": 1,
         "name": "Футболка",
-        "price": 1500,
-        "image": "images/tshirt.jpg"
+        "price": 20,
+        "image": "tshirt.jpg"
     },
     {
         "id": 2,
         "name": "Кроссовки",
-        "price": 5000,
-        "image": "images/sneakers.jpg"
+        "price": 50,
+        "image": "shoes.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Кепка",
+        "price": 15,
+        "image": "cap.jpg"
     }
 ]

@@ -56,3 +56,14 @@ function removeFromCart(index) {
 
 // При загрузке страницы сразу обновляем корзину
 document.addEventListener("DOMContentLoaded", displayCart);
+// Функция для добавления товара в корзину и перехода на checkout.html
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Товар добавлен в корзину!");
+
+    // Перенаправляем пользователя на checkout.html
+    window.location.href = "checkout.html";
+}
+

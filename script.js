@@ -1,21 +1,44 @@
-// Функция добавления товара в корзину
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || []; // Загружаем корзину
-    cart.push({ name, price }); // Добавляем товар
-    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем обратно
+document.addEventListener("DOMContentLoaded", function () {
+    if (document.getElementById("products")) {
+        loadProducts();
+    }
+    if (document.getElementById("cart-items")) {
+        displayCart();
+    }
+});
 
+function loadProducts() {
+    fetch("products.json")
+        .then(response => response.json())
+        .then(products => {
+            let productsContainer = document.getElementById("products");
+            products.forEach(product => {
+                let productElement = document.createElement("div");
+                productElement.classList.add("product");
+                productElement.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.price} $</p>
+                    <button onclick="addToCart('${product.name}', ${product.price})">Купить</button>
+                `;
+                productsContainer.appendChild(productElement);
+            });
+        });
+}
+
+function addToCart(name, price) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push({ name, price });
+    localStorage.setItem("cart", JSON.stringify(cart));
     alert("Товар добавлен в корзину!");
 }
 
-// Функция отображения товаров в корзине
 function displayCart() {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
     let cartItems = document.getElementById("cart-items");
     let totalPrice = document.getElementById("total-price");
 
-    if (!cartItems || !totalPrice) return; // Если элементов нет, ничего не делать
-
-    cartItems.innerHTML = ""; // Очищаем корзину перед рендерингом
+    cartItems.innerHTML = "";
     let total = 0;
 
     cart.forEach((item, index) => {
@@ -27,25 +50,20 @@ function displayCart() {
     totalPrice.innerText = `Итого: $${total}`;
 }
 
-// Функция для удаления товара из корзины
 function removeFromCart(index) {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1); // Удаляем товар
-    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем
-    displayCart(); // Обновляем корзину
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    displayCart();
 }
 
-// Функция для очистки корзины
 function clearCart() {
-    localStorage.removeItem("cart"); // Удаляем корзину
-    displayCart(); // Обновляем корзину
+    localStorage.removeItem("cart");
+    displayCart();
 }
 
 function checkout() {
-    window.location.href = "checkout.html"; // Переход на checkout.html
+    window.location.href = "checkout.html";
 }
-
-// Запускаем функцию отображения корзины при загрузке страницы
-document.addEventListener("DOMContentLoaded", displayCart);
 
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Корзина</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>🛒 Ваша корзина</h1>
@@ -11,42 +12,6 @@
     <h2 id="total-price">Итого: $0</h2>
     <button onclick="checkout()">Оформить заказ</button>
     <button onclick="clearCart()">Очистить корзину</button>
-    <script>
-        function displayCart() {
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            let cartItems = document.getElementById("cart-items");
-            let totalPrice = document.getElementById("total-price");
-
-            cartItems.innerHTML = "";
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                total += item.price;
-                cartItems.innerHTML += `<li>${item.name} - $${item.price} 
-                    <button onclick="removeFromCart(${index})">❌</button></li>`;
-            });
-
-            totalPrice.innerText = `Итого: $${total}`;
-        }
-
-        function removeFromCart(index) {
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            cart.splice(index, 1);
-            localStorage.setItem("cart", JSON.stringify(cart));
-            displayCart();
-        }
-
-        function clearCart() {
-            localStorage.removeItem("cart");
-            displayCart();
-        }
-
-        function checkout() {
-            alert("Заказ оформлен! 🎉");
-            clearCart();
-        }
-
-        displayCart();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

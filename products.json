@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Футболка",
+        "price": 1500,
+        "image": "images/tshirt.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Кроссовки",
+        "price": 5000,
+        "image": "images/sneakers.jpg"
+    }
+]

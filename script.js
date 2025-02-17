@@ -63,16 +63,13 @@ function removeFromCart(index) {
     displayCart();
 }
 
-// При загрузке страницы сразу обновляем корзину
-document.addEventListener("DOMContentLoaded", displayCart);
-// Функция для добавления товара в корзину и перехода на checkout.html
+// Функция добавления товара в корзину
 function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Товар добавлен в корзину!");
+    let cart = JSON.parse(localStorage.getItem("cart")) || []; // Получаем текущую корзину
+    cart.push({ name, price }); // Добавляем товар
+    localStorage.setItem("cart", JSON.stringify(cart)); // Сохраняем корзину в localStorage
 
-    // Перенаправляем пользователя на checkout.html
-    window.location.href = "checkout.html";
+    alert("Товар добавлен в корзину!"); // Уведомление для пользователя
 }
+
 

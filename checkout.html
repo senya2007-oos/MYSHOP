@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <h1>💳 Оформление заказа</h1>
+
     <form id="checkout-form">
         <input type="text" id="name" placeholder="Ваше имя" required>
         <input type="email" id="email" placeholder="Email" required>
@@ -19,23 +21,8 @@
         </select>
         <button type="submit">Перейти к оплате</button>
     </form>
-    <script>
-        document.getElementById("checkout-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            alert("Оплата пока не подключена! 💰");
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оплата</title>
-    <script src="https://js.stripe.com/v3/"></script>
-</head>
-<body>
-    <h1>Оплата товара</h1>
+
+    <h2>Оплата</h2>
     <button id="pay-button">Оплатить</button>
 
     <script src="script.js"></script>

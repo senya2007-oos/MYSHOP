@@ -1,98 +1,26 @@
-document.addEventListener("DOMContentLoaded", function () {
-    if (document.getElementById("products")) {
-        loadProducts();
-    }
-    if (document.getElementById("cart-items")) {
-        displayCart();
-    }
-
-    // Подключаем Stripe
-    const stripe = Stripe("pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb");
-
-    const payButton = document.getElementById("pay-button");
-    if (payButton) {
-        payButton.addEventListener("click", async function () {
-            try {
-                const response = await fetch("http://localhost:3000/checkout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ amount: 1000, currency: "eur" })
-                });
-
-                const data = await response.json();
-                if (data.clientSecret) {
-                    const { error } = await stripe.redirectToCheckout({
-                        sessionId: data.clientSecret
-                    });
-
-                    if (error) {
-                        console.error("Ошибка при редиректе:", error);
-                    }
-                } else {
-                    console.error("Ошибка получения clientSecret:", data);
-                }
-            } catch (err) {
-                console.error("Ошибка при запросе на сервер:", err);
-            }
+document.getElementById("pay-button").addEventListener("click", async function () {
+    try {
+        const response = await fetch("http://localhost:3000/checkout", { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount: 1000, currency: "eur" }) 
         });
+
+        const data = await response.json();
+        console.log("Ответ от сервера:", data); // Добавим лог для отладки
+
+        if (data.clientSecret) {
+            const stripe = Stripe("pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb");
+            const { error } = await stripe.redirectToCheckout({ sessionId: data.clientSecret });
+
+            if (error) {
+                console.error("Ошибка редиректа:", error);
+            }
+        } else {
+            console.error("Ошибка: сервер не вернул clientSecret", data);
+        }
+    } catch (err) {
+        console.error("Ошибка при запросе на сервер:", err);
     }
 });
 
-function loadProducts() {
-    fetch("products.json")
-        .then(response => response.json())
-        .then(products => {
-            let productsContainer = document.getElementById("products");
-            products.forEach(product => {
-                let productElement = document.createElement("div");
-                productElement.classList.add("product");
-                productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.price} $</p>
-                    <button onclick="addToCart('${product.name}', ${product.price})">Купить</button>
-                `;
-                productsContainer.appendChild(productElement);
-            });
-        });
-}
-
-function addToCart(name, price) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push({ name, price });
-    localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Товар добавлен в корзину!");
-}
-
-function displayCart() {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    let cartItems = document.getElementById("cart-items");
-    let totalPrice = document.getElementById("total-price");
-
-    cartItems.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        total += item.price;
-        cartItems.innerHTML += `<li>${item.name} - $${item.price} 
-            <button onclick="removeFromCart(${index})">❌</button></li>`;
-    });
-
-    totalPrice.innerText = `Итого: $${total}`;
-}
-
-function removeFromCart(index) {
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    displayCart();
-}
-
-function clearCart() {
-    localStorage.removeItem("cart");
-    displayCart();
-}
-
-function checkout() {
-    window.location.href = "checkout.html";
-}

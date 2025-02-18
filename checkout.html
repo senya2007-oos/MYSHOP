@@ -11,14 +11,22 @@
     <h1>💳 Оформление заказа</h1>
 
     <form id="checkout-form">
+        <label for="name">Ваше имя</label>
         <input type="text" id="name" placeholder="Ваше имя" required>
+
+        <label for="email">Email</label>
         <input type="email" id="email" placeholder="Email" required>
+
+        <label for="phone">Телефон</label>
         <input type="tel" id="phone" placeholder="Телефон" required>
+
+        <label for="payment-method">Метод оплаты</label>
         <select id="payment-method">
             <option value="card">Банковская карта</option>
             <option value="paypal">PayPal</option>
             <option value="stripe">Stripe</option>
         </select>
+
         <button type="submit">Перейти к оплате</button>
     </form>
 
@@ -28,4 +36,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
 

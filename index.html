@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Магазин</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>🛍 Добро пожаловать в магазин!</h1>
@@ -12,21 +12,16 @@
     <!-- Контейнер для товаров -->
     <div id="products"></div>
 
-    <!-- Ссылки на корзину и оформление заказа -->
-    <nav>
-        <a href="cart.html">Перейти в корзину 🛒</a>
-        <a href="checkout.html">Оформить заказ 💳</a>
-    </nav>
+    <!-- Корзина -->
+    <div id="cart">
+        <h2>🛒 Корзина</h2>
+        <div id="cart-items"></div>
+        <p>Итого: <span id="cart-total">0 ₽</span></p>
+        <button id="pay-button">Оплатить</button>
+    </div>
 
-    <!-- Подключение скрипта -->
     <script src="script.js"></script>
 </body>
 </html>
-<div id="cart">
-    <h2>Корзина</h2>
-    <div id="cart-items"></div>
-    <p>Итого: <span id="cart-total">0 ₽</span></p>
-    <button id="pay-button">Оплатить</button>
-</div>
 
 

@@ -16,10 +16,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const productElement = document.createElement("div");
                 productElement.classList.add("product");
                 productElement.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.price} ₽</p>
-                    <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Добавить в корзину</button>
+                   productElement.innerHTML = `
+    <p>${product.name} - ${product.price} ₽</p>
+    <button onclick="addToCart(${product.id})">Добавить в корзину</button>
+`;
+
                 `;
                 productsContainer.appendChild(productElement);
             });

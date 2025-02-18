@@ -1,62 +1,47 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Проверяем, есть ли контейнер для товаров
-    const productsContainer = document.getElementById("products");
-    if (productsContainer) {
-        fetch("products.json")
-            .then(response => response.json())
-            .then(products => {
-                products.forEach(product => {
-                    const productElement = document.createElement("div");
-                    productElement.classList.add("product");
-                    productElement.innerHTML = `
-                        <h2>${product.name}</h2>
-                        <p>Цена: ${product.price} ₽</p>
-                        <button onclick="addToCart('${product.id}', '${product.name}', ${product.price})">
-                            Добавить в корзину
-                        </button>
-                    `;
-                    productsContainer.appendChild(productElement);
-                });
-            })
-            .catch(error => console.error("Ошибка загрузки товаров:", error));
-    }
+    const cartContainer = document.getElementById("cart-items");
+    const cartTotal = document.getElementById("cart-total");
 
-    // Функция добавления товара в корзину
-    window.addToCart = function (id, name, price) {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        cart.push({ id, name, price });
-        localStorage.setItem("cart", JSON.stringify(cart));
-        alert("Товар добавлен в корзину!");
-    };
-
-    // Проверяем, есть ли корзина на странице
-    const cartItemsContainer = document.getElementById("cart-items");
-    if (cartItemsContainer) {
-        updateCart();
-    }
-
-    // Обновление корзины
     function updateCart() {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        cartItemsContainer.innerHTML = ""; // Очищаем перед обновлением
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cartContainer.innerHTML = ""; // Очищаем корзину
 
-        cart.forEach(item => {
-            const itemElement = document.createElement("div");
-            itemElement.innerHTML = `<p>${item.name} - ${item.price} ₽</p>`;
-            cartItemsContainer.appendChild(itemElement);
+        if (cart.length === 0) {
+            cartContainer.innerHTML = "<p>Корзина пуста 🛒</p>";
+            cartTotal.textContent = "0 ₽";
+            return;
+        }
+
+        let total = 0;
+        cart.forEach((item, index) => {
+            total += item.price * item.quantity;
+
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+            cartItem.innerHTML = `
+                <p>${item.name} - ${item.quantity} шт. - ${item.price * item.quantity} ₽</p>
+                <button class="remove-item" data-index="${index}">Удалить</button>
+            `;
+            cartContainer.appendChild(cartItem);
+        });
+
+        cartTotal.textContent = `${total} ₽`;
+
+        document.querySelectorAll(".remove-item").forEach(button => {
+            button.addEventListener("click", function () {
+                const index = this.getAttribute("data-index");
+                cart.splice(index, 1);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCart();
+            });
         });
     }
 
-    // Проверяем кнопку оплаты (чтобы ошибка не появлялась)
-    const payButton = document.getElementById("pay-button");
-    if (payButton) {
-        payButton.addEventListener("click", function () {
-            alert("Оплата ещё не реализована.");
-        });
+    if (cartContainer) {
+        updateCart();
     }
 });
 
-[
     {
         "id": 1,
         "name": "Футболка",

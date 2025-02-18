@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Корзина</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/styles/styles.css">
 </head>
 <body>
-    <h1>🛒 Ваша корзина</h1>
-    <ul id="cart-items"></ul>
-    <h2 id="total-price">Итого: $0</h2>
-    <button onclick="checkout()">Оформить заказ</button>
-    <button onclick="clearCart()">Очистить корзину</button>
-    <script src="script.js"></script>
+    <h1>Ваша корзина</h1>
+    <div id="cart-items">
+        <!-- Список товаров в корзине будет отображаться здесь -->
+    </div>
+    <h2>Общая сумма: <span id="total-amount">0</span> ₽</h2>
+    
+    <!-- Кнопка для перехода к оплате -->
+    <a href="checkout.html"><button>Перейти к оплате</button></a>
+
+    <script src="scripts/script.js"></script>
 </body>
 </html>

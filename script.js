@@ -1,37 +1,36 @@
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
     const productsContainer = document.getElementById("products");
     const cartContainer = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
+    const checkoutForm = document.getElementById("checkout-form");
+    
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Загружаем товары из products.json
+    // Функция для загрузки товаров
     async function loadProducts() {
         try {
-            const response = await fetch("products.json");
-            if (!response.ok) throw new Error("Ошибка загрузки товаров!");
-            
+            const response = await fetch("products.json"); // Проверяем путь
+            if (!response.ok) throw new Error("Ошибка загрузки товаров");
             const products = await response.json();
-            console.log("📦 Товары загружены: ", products);
 
+            productsContainer.innerHTML = "";
             products.forEach(product => {
-                const productElement = document.createElement("div");
-                productElement.classList.add("product");
-                productElement.innerHTML = `
-                   productElement.innerHTML = `
-    <p>${product.name} - ${product.price} ₽</p>
-    <button onclick="addToCart(${product.id})">Добавить в корзину</button>
-`;
-
+                const productEl = document.createElement("div");
+                productEl.classList.add("product");
+                productEl.innerHTML = `
+                    <p><strong>${product.name}</strong></p>
+                    <p>${product.price} ₽</p>
+                    <button data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+                        Добавить в корзину
+                    </button>
                 `;
-                productsContainer.appendChild(productElement);
+                productsContainer.appendChild(productEl);
             });
 
-            // Добавляем обработчики кнопкам "Добавить в корзину"
-            document.querySelectorAll(".add-to-cart").forEach(button => {
+            // Добавляем обработчики на кнопки "Добавить в корзину"
+            document.querySelectorAll(".product button").forEach(button => {
                 button.addEventListener("click", function () {
-                    const id = this.getAttribute("data-id");
-                    const name = this.getAttribute("data-name");
-                    const price = parseFloat(this.getAttribute("data-price"));
-                    addToCart(id, name, price);
+                    addToCart(this.dataset.id, this.dataset.name, this.dataset.price);
                 });
             });
 
@@ -40,26 +39,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Добавление в корзину
+    // Функция добавления в корзину
     function addToCart(id, name, price) {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-        const existingItem = cart.find(item => item.id === id);
-        if (existingItem) {
-            existingItem.quantity++;
+        const itemIndex = cart.findIndex(item => item.id === id);
+        if (itemIndex > -1) {
+            cart[itemIndex].quantity++;
         } else {
-            cart.push({ id, name, price, quantity: 1 });
+            cart.push({ id, name, price: parseFloat(price), quantity: 1 });
         }
-
-        localStorage.setItem("cart", JSON.stringify(cart));
+        saveCart();
         updateCart();
     }
 
-    // Обновление корзины
+    // Функция обновления корзины
     function updateCart() {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
         cartContainer.innerHTML = "";
-
         if (cart.length === 0) {
             cartContainer.innerHTML = "<p>Корзина пуста 🛒</p>";
             cartTotal.textContent = "0 ₽";
@@ -69,9 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         let total = 0;
         cart.forEach((item, index) => {
             total += item.price * item.quantity;
-
             const cartItem = document.createElement("div");
-            cartItem.classList.add("cart-item");
             cartItem.innerHTML = `
                 <p>${item.name} - ${item.quantity} шт. - ${item.price * item.quantity} ₽</p>
                 <button class="remove-item" data-index="${index}">Удалить</button>
@@ -81,27 +73,41 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         cartTotal.textContent = `${total} ₽`;
 
-        // Удаление товара из корзины
+        // Удаление из корзины
         document.querySelectorAll(".remove-item").forEach(button => {
             button.addEventListener("click", function () {
                 const index = this.getAttribute("data-index");
                 cart.splice(index, 1);
-                localStorage.setItem("cart", JSON.stringify(cart));
+                saveCart();
                 updateCart();
             });
         });
     }
 
-    // Оплата (пока заглушка)
-    const payButton = document.getElementById("pay-button");
-    if (payButton) {
-        payButton.addEventListener("click", function () {
-            alert("Оплата ещё не реализована.");
+    // Функция сохранения корзины в localStorage
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    // Форма оформления заказа
+    if (checkoutForm) {
+        checkoutForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const formData = new FormData(checkoutForm);
+            const orderDetails = {
+                name: formData.get("name"),
+                address: formData.get("address"),
+                cart
+            };
+
+            console.log("🛒 Заказ оформлен:", orderDetails);
+            alert("✅ Заказ оформлен!");
+            localStorage.removeItem("cart");
+            updateCart();
         });
     }
 
-    // Загружаем товары и обновляем корзину
-    await loadProducts();
+    loadProducts();
     updateCart();
 });
 

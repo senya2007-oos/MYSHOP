@@ -1,40 +1,26 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-
+const express = require('express');
+const stripe = require('stripe')(Secret key);sk_test_51QtawNCtOmCvtLjDiP7kiVWaLeWZ7zcYFJwiFk0j5KmFwwNEyznZxkpEGXr6U0uzbrjw2QqjIri4HvlqiIRYgGYP00arwIT7mN
 const app = express();
+const PORT = 3000;
+
 app.use(express.json());
-app.use(cors());
 
-// Проверка сервера
-app.get("/", (req, res) => {
-    res.send("🚀 Сервер Stripe работает!");
-});
-
-// Маршрут для оплаты
-app.post("/checkout", async (req, res) => {
+app.post('/checkout', async (req, res) => {
     try {
         const { amount, currency } = req.body;
-
-        if (!amount || !currency) {
-            return res.status(400).json({ error: "Нужно указать сумму и валюту!" });
-        }
-
         const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency,
-            payment_method_types: ["card"],
+            amount: amount, // сумма в центах, т.е. 1000 = 10.00 EUR
+            currency: currency,
         });
 
         res.json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
-        console.error("Ошибка сервера:", error);
-        res.status(500).json({ error: "Ошибка на сервере." });
+        console.error("Ошибка при создании сессии оплаты:", error);
+        res.status(500).json({ error: error.message });
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Сервер запущен на порту ${PORT}`));
-
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
 

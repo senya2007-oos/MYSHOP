@@ -66,5 +66,25 @@ document.getElementById("pay-with-card").addEventListener("click", async functio
         console.error("Ошибка при запросе на сервер:", err);
     }
 });
+[
+    {
+        "id": 1,
+        "name": "Футболка",
+        "price": 20,
+        "image": "tshirt.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Кроссовки",
+        "price": 50,
+        "image": "shoes.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Кепка",
+        "price": 15,
+        "image": "cap.jpg"
+    }
+]
 
 

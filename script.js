@@ -76,5 +76,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "image": "cap.jpg"
     }
 ]
+document.addEventListener("DOMContentLoaded", function () {
+    // Проверяем, есть ли кнопка оплаты перед добавлением обработчика
+    const payButton = document.getElementById("pay-button");
+    if (payButton) {
+        payButton.addEventListener("click", function () {
+            alert("Оплата ещё не реализована.");
+        });
+    }
+});
 
 

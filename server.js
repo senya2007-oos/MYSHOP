@@ -1,35 +1,34 @@
-require("dotenv").config();
+require("dotenv").config(); // Подключаем dotenv
+
 const express = require("express");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const Stripe = require("stripe");
 const cors = require("cors");
 
 const app = express();
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // sk_test_51QtawNCtOmCvtLjDiP7kiVWaLeWZ7zcYFJwiFk0j5KmFwwNEyznZxkpEGXr6U0uzbrjw2QqjIri4HvlqiIRYgGYP00arwIT7mN
+
 app.use(express.json());
 app.use(cors());
 
-app.post("/create-checkout-session", async (req, res) => {
+// Эндпоинт для оплаты
+app.post("/create-payment-intent", async (req, res) => {
+    const { amount, currency } = req.body;
+
     try {
-        const session = await stripe.checkout.sessions.create({
-            payment_method_types: ["card", "google_pay", "apple_pay"],
-            line_items: [{
-                price_data: {
-                    currency: "eur", // Можно изменить на "usd"
-                    product_data: { name: "Тестовый товар" },
-                    unit_amount: 5000 // 50.00 EUR
-                },
-                quantity: 1
-            }],
-            mode: "payment",
-            success_url: "https://your-website.com/success.html",
-            cancel_url: "https://your-website.com/cancel.html",
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: currency || process.env.CURRENCY, // EUR
         });
 
-        res.json({ id: session.id });
+        res.json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
-        console.error("Ошибка при создании сессии:", error);
-        res.status(500).send("Ошибка сервера");
+        res.status(500).json({ error: error.message });
     }
 });
 
-app.listen(3000, () => console.log("✅ Сервер запущен на порту 3000"));
+// Запуск сервера
+app.listen(3000, () => {
+    console.log("Сервер запущен на http://localhost:3000");
+});
+
 

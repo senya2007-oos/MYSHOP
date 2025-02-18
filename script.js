@@ -5,6 +5,37 @@ document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById("cart-items")) {
         displayCart();
     }
+
+    // Подключаем Stripe
+    const stripe = Stripe("pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb");
+
+    const payButton = document.getElementById("pay-button");
+    if (payButton) {
+        payButton.addEventListener("click", async function () {
+            try {
+                const response = await fetch("http://localhost:3000/checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ amount: 1000, currency: "eur" })
+                });
+
+                const data = await response.json();
+                if (data.clientSecret) {
+                    const { error } = await stripe.redirectToCheckout({
+                        sessionId: data.clientSecret
+                    });
+
+                    if (error) {
+                        console.error("Ошибка при редиректе:", error);
+                    }
+                } else {
+                    console.error("Ошибка получения clientSecret:", data);
+                }
+            } catch (err) {
+                console.error("Ошибка при запросе на сервер:", err);
+            }
+        });
+    }
 });
 
 function loadProducts() {
@@ -64,13 +95,4 @@ function clearCart() {
 
 function checkout() {
     window.location.href = "checkout.html";
-} document.addEventListener("DOMContentLoaded", function () {
-    const stripe = Stripe("Publishable key"); // 
-pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb
-
-    document.getElementById("pay-button").addEventListener("click", async function () {
-        const response = awaitfetch("http://localhost:3000/checkout", { 
-    method: "POST", 
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: 1000, currency: "eur" })
-})
+}

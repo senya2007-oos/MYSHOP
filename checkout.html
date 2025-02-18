@@ -21,11 +21,11 @@
 
         <!-- Исправлено: for="phone" соответствует id="phone" -->
         <label for="phone">Телефон</label>
-        <input type="tel" id="phone" placeholder="Телефон" required>
+        <input type="tel" id="phone" placeholder="Телефон" required pattern="[\+][0-9]{1,4}[\-][0-9]{7,10}">
 
         <!-- Исправлено: for="payment-method" соответствует id="payment-method" -->
         <label for="payment-method">Метод оплаты</label>
-        <select id="payment-method">
+        <select id="payment-method" required>
             <option value="card">Банковская карта</option>
             <option value="paypal">PayPal</option>
             <option value="stripe">Stripe</option>

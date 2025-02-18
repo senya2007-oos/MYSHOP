@@ -4,14 +4,21 @@ document.addEventListener("DOMContentLoaded", function () {
     setupPaymentButton();
 });
 
-// 📌 Функция загрузки товаров из `products.json`
+// 📌 Функция загрузки товаров
 function loadProducts() {
     fetch("products.json")
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка загрузки products.json");
+            return response.json();
+        })
         .then(products => {
+            console.log("📦 Товары загружены:", products);
             const productsContainer = document.getElementById("products");
 
-            if (!productsContainer) return;
+            if (!productsContainer) {
+                console.error("❌ Элемент #products не найден!");
+                return;
+            }
 
             products.forEach(product => {
                 const productElement = document.createElement("div");
@@ -25,11 +32,12 @@ function loadProducts() {
                 productsContainer.appendChild(productElement);
             });
         })
-        .catch(error => console.error("Ошибка загрузки товаров:", error));
+        .catch(error => console.error("❌ Ошибка загрузки товаров:", error));
 }
 
 // 📌 Функция добавления товара в корзину
 function addToCart(id, name, price) {
+    console.log(`➕ Добавляем в корзину: ${name} (${price} ₽)`);
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
     let existingItem = cart.find(item => item.id === id);
@@ -48,10 +56,15 @@ function updateCart() {
     const cartContainer = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
 
-    if (!cartContainer || !cartTotal) return;
+    if (!cartContainer || !cartTotal) {
+        console.error("❌ Элементы корзины не найдены!");
+        return;
+    }
 
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cartContainer.innerHTML = ""; // Очищаем контейнер
+    console.log("🛒 Текущая корзина:", cart);
+
+    cartContainer.innerHTML = "";
 
     if (cart.length === 0) {
         cartContainer.innerHTML = "<p>Корзина пуста 🛒</p>";
@@ -74,7 +87,6 @@ function updateCart() {
 
     cartTotal.textContent = `${total} ₽`;
 
-    // Добавляем обработчики кнопок удаления
     document.querySelectorAll(".remove-item").forEach(button => {
         button.addEventListener("click", function () {
             const index = this.getAttribute("data-index");
@@ -85,7 +97,7 @@ function updateCart() {
     });
 }
 
-// 📌 Функция обработки нажатия кнопки оплаты
+// 📌 Обработчик кнопки оплаты
 function setupPaymentButton() {
     const payButton = document.getElementById("pay-button");
     if (payButton) {
@@ -94,5 +106,6 @@ function setupPaymentButton() {
         });
     }
 }
+
 
 

@@ -1,3 +1,5 @@
+require("dotenv").config(); // Загружаем переменные из .env
+
 require("dotenv").config(); // Подключаем dotenv
 
 const express = require("express");

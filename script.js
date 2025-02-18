@@ -69,15 +69,8 @@ function checkout() {
 pk_test_51QtawNCtOmCvtLjD5xEdYM76krTh6cZ4CBTRMnLv49joqSYoeK60X8hJehuAvbVtHFBNkqcMKxXpYufFlKVwy3zA00utdLHQrb
 
     document.getElementById("pay-button").addEventListener("click", async function () {
-        const response = await fetch("http://localhost:3000/create-checkout-session", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        const session = await response.json();
-        stripe.redirectToCheckout({ sessionId: session.id });
-    });
-});
-
-
-
+        const response = awaitfetch("http://localhost:3000/checkout", { 
+    method: "POST", 
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ amount: 1000, currency: "eur" })
+})

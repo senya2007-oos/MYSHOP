@@ -4,43 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="assets/styles/styles.css">
+    <script src="https://js.stripe.com/v3/"></script> <!-- Подключаем Stripe -->
 </head>
 <body>
-    <h1>💳 Оформление заказа</h1>
+    <h1>Оформление заказа</h1>
 
-    <form id="checkout-form">
-        <!-- Исправлено: для name атрибут for соответствует id="name" -->
-        <label for="name">Ваше имя</label>
-        <input type="text" id="name" placeholder="Ваше имя" required>
+    <h2>Метод оплаты</h2>
+    <button id="pay-with-card">Оплатить картой</button>
+    <button id="pay-with-apple">Оплатить через Apple Pay</button>
+    <button id="pay-with-google">Оплатить через Google Pay</button>
 
-        <!-- Исправлено: для email атрибут for соответствует id="email" -->
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Email" required>
-
-        <!-- Исправлено: для phone атрибут for соответствует id="phone" -->
-        <label for="phone">Телефон</label>
-        <input type="tel" id="phone" placeholder="Телефон" required>
-
-        <!-- Исправлено: для payment-method атрибут for соответствует id="payment-method" -->
-        <label for="payment-method">Метод оплаты</label>
-        <select id="payment-method" required>
-            <option value="card">Банковская карта</option>
-            <option value="paypal">PayPal</option>
-            <option value="stripe">Stripe</option>
-        </select>
-
-        <button type="submit">Перейти к оплате</button>
-    </form>
-
-    <h2>Оплата</h2>
-    <button id="pay-button">Оплатить</button>
-
-    <script src="script.js"></script>
+    <script src="scripts/script.js"></script>
 </body>
 </html>
-
 
 
 

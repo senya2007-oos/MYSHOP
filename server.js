@@ -1,25 +1,30 @@
-require("dotenv").config(); // Загружаем переменные из .env
-
-require("dotenv").config(); // Подключаем dotenv
-
+require("dotenv").config();
 const express = require("express");
-const Stripe = require("stripe");
 const cors = require("cors");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); // sk_test_51QtawNCtOmCvtLjDiP7kiVWaLeWZ7zcYFJwiFk0j5KmFwwNEyznZxkpEGXr6U0uzbrjw2QqjIri4HvlqiIRYgGYP00arwIT7mN
-
 app.use(express.json());
 app.use(cors());
 
-// Эндпоинт для оплаты
-app.post("/create-payment-intent", async (req, res) => {
-    const { amount, currency } = req.body;
+// Проверка сервера
+app.get("/", (req, res) => {
+    res.send("🚀 Сервер Stripe работает!");
+});
 
+// Маршрут для оплаты
+app.post("/checkout", async (req, res) => {
     try {
+        const { amount, currency } = req.body;
+
+        if (!amount || !currency) {
+            return res.status(400).json({ error: "Нужно указать сумму и валюту!" });
+        }
+
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount,
-            currency: currency || process.env.CURRENCY, // EUR
+            amount,
+            currency,
+            payment_method_types: ["card"],
         });
 
         res.json({ clientSecret: paymentIntent.client_secret });
@@ -28,9 +33,5 @@ app.post("/create-payment-intent", async (req, res) => {
     }
 });
 
-// Запуск сервера
-app.listen(3000, () => {
-    console.log("Сервер запущен на http://localhost:3000");
-});
-
-
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`✅ Сервер запущен на порту ${PORT}`));

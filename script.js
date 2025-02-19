@@ -3,13 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const cartContainer = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
     const checkoutForm = document.getElementById("checkout-form");
-    
+    const clearCartButton = document.getElementById("clear-cart");
+
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Функция для загрузки товаров
+    // Функция загрузки товаров
     async function loadProducts() {
         try {
-            const response = await fetch("products.json"); // Проверяем путь
+            const response = await fetch("products.json");
             if (!response.ok) throw new Error("Ошибка загрузки товаров");
             const products = await response.json();
 
@@ -21,13 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     <p><strong>${product.name}</strong></p>
                     <p>${product.price} ₽</p>
                     <button data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-                        Добавить в корзину
+                        ➕ Добавить в корзину
                     </button>
                 `;
                 productsContainer.appendChild(productEl);
             });
 
-            // Добавляем обработчики на кнопки "Добавить в корзину"
             document.querySelectorAll(".product button").forEach(button => {
                 button.addEventListener("click", function () {
                     addToCart(this.dataset.id, this.dataset.name, this.dataset.price);
@@ -66,14 +66,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const cartItem = document.createElement("div");
             cartItem.innerHTML = `
                 <p>${item.name} - ${item.quantity} шт. - ${item.price * item.quantity} ₽</p>
-                <button class="remove-item" data-index="${index}">Удалить</button>
+                <button class="remove-item" data-index="${index}">❌ Удалить</button>
             `;
             cartContainer.appendChild(cartItem);
         });
 
         cartTotal.textContent = `${total} ₽`;
 
-        // Удаление из корзины
         document.querySelectorAll(".remove-item").forEach(button => {
             button.addEventListener("click", function () {
                 const index = this.getAttribute("data-index");
@@ -84,31 +83,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Функция сохранения корзины в localStorage
+    // Функция сохранения корзины
     function saveCart() {
         localStorage.setItem("cart", JSON.stringify(cart));
     }
 
-    // Форма оформления заказа
-    if (checkoutForm) {
-        checkoutForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const formData = new FormData(checkoutForm);
-            const orderDetails = {
-                name: formData.get("name"),
-                address: formData.get("address"),
-                cart
-            };
+    // Очистка корзины
+    clearCartButton.addEventListener("click", function () {
+        cart = [];
+        saveCart();
+        updateCart();
+    });
 
-            console.log("🛒 Заказ оформлен:", orderDetails);
-            alert("✅ Заказ оформлен!");
-            localStorage.removeItem("cart");
-            updateCart();
-        });
-    }
+    // Форма оформления заказа
+    checkoutForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (cart.length === 0) {
+            alert("Корзина пуста!");
+            return;
+        }
+
+        const formData = new FormData(checkoutForm);
+        const orderDetails = {
+            name: formData.get("name"),
+            address: formData.get("address"),
+            payment: formData.get("payment"),
+            cart
+        };
+
+        console.log("🛒 Заказ оформлен:", orderDetails);
+        alert(`✅ Заказ оформлен!\nМетод оплаты: ${orderDetails.payment}`);
+        localStorage.removeItem("cart");
+        cart = [];
+        updateCart();
+    });
 
     loadProducts();
     updateCart();
 });
-
 

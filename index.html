@@ -7,28 +7,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>🛍 Добро пожаловать в магазин!</h1>
-
+    <h1>🛍️ Наш магазин</h1>
+    
     <div id="products"></div>
 
-    <h2>🛒 Корзина</h2>
-    <div id="cart-items"></div>
-    <p><strong>Итого:</strong> <span id="cart-total">0 ₽</span></p>
-    <button id="clear-cart">🗑 Очистить корзину</button>
-
-    <h2>🚚 Оформление заказа</h2>
-    <form id="checkout-form">
-        <label>Имя: <input type="text" name="name" required></label><br>
-        <label>Адрес доставки: <input type="text" name="address" required></label><br>
-        <label>Метод оплаты:
-            <select name="payment" required>
-                <option value="card">💳 Банковская карта</option>
-                <option value="paypal">💰 PayPal</option>
-                <option value="cash">💵 Наличными при получении</option>
-            </select>
-        </label><br>
-        <button type="submit">✅ Оформить заказ</button>
-    </form>
+    <a href="cart.html"><button>🛒 Открыть корзину</button></a>
 
     <script src="script.js"></script>
 </body>

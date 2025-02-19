@@ -4,36 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="assets/styles/styles.css">
-    <script src="https://js.stripe.com/v3/"></script> <!-- Подключаем Stripe -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Оформление заказа</h1>
+    <h1>🚚 Оформление заказа</h1>
 
-    <h2>Метод оплаты</h2>
-    <button id="pay-with-card">Оплатить картой</button>
-    <button id="pay-with-apple">Оплатить через Apple Pay</button>
-    <button id="pay-with-google">Оплатить через Google Pay</button>
+    <h2>🛒 Ваша корзина</h2>
+    <div id="cart-items"></div>
+    <p><strong>Итого:</strong> <span id="cart-total">0 ₽</span></p>
 
-    <script src="scripts/script.js"></script>
+    <h2>📋 Введите данные</h2>
+    <form id="checkout-form">
+        <label>Имя: <input type="text" name="name" required></label><br>
+        <label>Email: <input type="email" name="email" required></label><br>
+        <label>Телефон: <input type="tel" name="phone" required></label><br>
+        <label>Адрес доставки: <input type="text" name="address" required></label><br>
+
+        <label>Метод оплаты:
+            <select name="payment" required>
+                <option value="card">💳 Банковская карта</option>
+                <option value="paypal">💰 PayPal</option>
+                <option value="cash">💵 Наличными при получении</option>
+            </select>
+        </label><br>
+
+        <button type="submit">✅ Подтвердить заказ</button>
+    </form>
+
+    <p><a href="index.html">← Вернуться в магазин</a></p>
+
+    <script src="checkout.js"></script>
 </body>
 </html>
-<form id="checkout-form">
-    <label for="name">Имя:</label>
-    <input type="text" id="name" placeholder="Ваше имя" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="Ваш email" required>
-
-    <label for="phone">Телефон:</label>
-    <input type="tel" id="phone" placeholder="Ваш телефон" required>
-
-    <label for="address">Адрес доставки:</label>
-    <input type="text" id="address" placeholder="Улица, дом, квартира" required>
-
-    <h2>Оплата</h2>
-    <button id="pay-button">Оплатить</button>
-</form>
 
 
 

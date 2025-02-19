@@ -1,3 +1,4 @@
+<!-- checkout.html (Оформление заказа) -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,33 +8,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>🚚 Оформление заказа</h1>
-
-    <div id="cart-items"></div>
-    <p><strong>Итого:</strong> <span id="cart-total">0 ₽</span></p>
-
-    <h2>📋 Введите данные</h2>
+    <h1>Оформление заказа</h1>
     <form id="checkout-form">
-        <label>Имя: <input type="text" name="name" required></label><br>
-        <label>Email: <input type="email" name="email" required></label><br>
-        <label>Телефон: <input type="tel" name="phone" required></label><br>
-        <label>Адрес доставки: <input type="text" name="address" required></label><br>
-
-        <label>Метод оплаты:
-            <select name="payment" required>
-                <option value="card">💳 Банковская карта</option>
-                <option value="paypal">💰 PayPal</option>
-                <option value="cash">💵 Наличными при получении</option>
-            </select>
-        </label><br>
-
-        <button type="submit">✅ Подтвердить заказ</button>
+        <input type="text" id="name" placeholder="Ваше имя" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="address" placeholder="Адрес доставки" required>
+        <button type="submit">Оплатить</button>
     </form>
-
-    <p><a href="cart.html">← Вернуться в корзину</a></p>
-
-    <script src="checkout.js"></script>
+    <a href="cart.html">Назад в корзину</a>
+    <script src="script.js"></script>
 </body>
 </html>
-
 
